@@ -1,7 +1,21 @@
 :root {
-  --primary-color: #2D41A7;
-  --secondary-color: #0B1D78;
-  --gray-color: #E4E4E4;
-  --white-color: #FFFFFF;
-  --black-color: #000000;
+  --dark-color1: #15171A;
+  --white-color1: #FFF; 
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark-color1);
+  color: var(--white-color1);
+  width: 100%;
+  font-family: sans-serif;
+}
+
+button {
+  cursor: pointer;
 }
