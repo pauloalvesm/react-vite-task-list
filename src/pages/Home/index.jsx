@@ -3,17 +3,32 @@ import "./home.css";
 
 import { Link } from "react-router-dom";
 
+import { auth } from "../../services/firebaseConnection";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin(e) {
+  const navigate = useNavigate();
+
+  async function handleLogin(e) {
     e.preventDefault();
 
-    if (email !== "" && password !== "") {
-      alert("Test");
+    if (email !== " && password !== ") {
+
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          navigate("/admin", { replace: true })
+        })
+        .catch(() => {
+          console.log("ERROR WHILE LOGGING IN")
+        })
+
     } else {
-      alert("Fill in all the fields!");
+      alert("Please fill in all fields!")
     }
 
   }
@@ -43,7 +58,7 @@ export default function Home() {
       </form>
 
       <Link className="button-link" to="/register">
-        Don't have an account? Sign up
+        Don"t have an account? Sign up
       </Link>
 
     </div>
