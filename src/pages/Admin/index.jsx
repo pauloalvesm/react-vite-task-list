@@ -9,7 +9,9 @@ import {
     onSnapshot,
     query,
     orderBy,
-    where
+    where,
+    doc,
+    deleteDoc
 } from "firebase/firestore";
 
 import "./admin.css";
@@ -78,6 +80,11 @@ export default function Admin() {
         await signOut(auth);
     }
 
+    async function deleteTask(id) {
+        const docRef = doc(db, "tasks", id)
+        await deleteDoc(docRef);
+    }
+
     return (
         <div className="admin-container">
             <h1>My tasks</h1>
@@ -92,14 +99,16 @@ export default function Admin() {
                 <button className="btn-register" type="submit">Register task</button>
             </form>
 
-            <article className="list">
-                <p>Study javascript and reactjs tonight</p>
+            {tasks.map((item) => (
+                <article key={item.id} className="list">
+                    <p>{item.task}</p>
 
-                <div>
-                    <button>Edit</button>
-                    <button className="btn-delete">Complete</button>
-                </div>
-            </article>
+                    <div>
+                        <button>Edit</button>
+                        <button onClick={() => deleteTask(item.id)} className="btn-delete">Complete</button>
+                    </div>
+                </article>
+            ))}
 
             <button className="btn-logout" onClick={handleLogout}>Logout</button>
 
