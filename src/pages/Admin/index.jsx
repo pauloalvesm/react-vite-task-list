@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
 
-import { auth, db } from "../../firebaseConnection";
+import { auth, db } from "../../services/firebaseConnection";
 import { signOut } from "firebase/auth";
 
-import { addDoc, collection } from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    onSnapshot,
+    query,
+    orderBy,
+    where
+} from "firebase/firestore";
 
 import "./admin.css";
 
@@ -11,14 +18,38 @@ export default function Admin() {
     const [taskInput, setTaskInput] = useState("");
     const [user, setUser] = useState({});
 
+    const [tasks, setTasks] = useState([]);
+
     useEffect(() => {
         async function loadTasks() {
-            const userDetail = localStorage.getItem("@detailUser");
-            setUser(JSON.parse(userDetail));
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))
+
+            if (userDetail) {
+                const data = JSON.parse(userDetail);
+                const taskRef = collection(db, "tasks");
+                const getQuery = query(taskRef, orderBy("created", "desc"), where("userUid", "==", data?.uid));
+
+                const unsub = onSnapshot(getQuery, (snapshot) => {
+                    let list = [];
+
+                    snapshot.forEach((doc) => {
+                        list.push({
+                            id: doc.id,
+                            task: doc.data().task,
+                            userUid: doc.data().userUid
+                        })
+                    });
+
+                    console.log(list);
+                    setTasks(list);
+
+                })
+            }
         }
 
         loadTasks();
-    }, [])
+    }, []);
 
     async function handleRegister(e) {
         e.preventDefault();
