@@ -26,3 +26,23 @@ body {
 button {
   cursor: pointer;
 }
+
+.animation-pulse-1s {
+    animation: pulse;
+    animation-duration: 1s;
+}
+
+.animation-pulse-2s {
+    animation: pulse;
+    animation-duration: 2s;
+}
+
+.animation-fade-in-downbig-1s {
+    animation: fadeInDownBig;
+    animation-duration: 1s;
+}
+
+.animation-fade-in-downbig-1-5s {
+    animation: fadeInDownBig;
+    animation-duration: 1.5s;
+}
