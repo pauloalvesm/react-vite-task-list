@@ -11,30 +11,41 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPulsing, setIsPulsing] = useState(false);
 
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
 
-    if (email !== " && password !== ") {
+    setTimeout(async () => {
 
-      await signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          navigate("/admin", { replace: true })
-        })
-        .catch(() => {
-          console.log("ERROR WHILE LOGGING IN")
-        })
+      setIsPulsing(true);
 
-    } else {
-      alert("Please fill in all fields!")
-    }
+      if (email !== "" && password !== "") {
+
+        await signInWithEmailAndPassword(auth, email, password)
+          .then(() => {
+            navigate("/admin", { replace: true })
+          })
+          .catch(() => {
+            console.log("ERROR WHILE LOGGING IN")
+          })
+
+      } else {
+        alert("Please fill in all fields!")
+      }
+
+      setTimeout(() => {
+        setIsPulsing(false);
+      }, 1000);
+
+    }, 1000);
 
   }
 
   return (
-    <div className="home-container">
+    <div className="home-container animation-fade-in-downbig-1s">
       <h1>Task List</h1>
       <span>Manage your schedule easily.</span>
 
@@ -54,7 +65,13 @@ export default function Home() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">Access</button>
+        <button
+          type="submit"
+          className={isPulsing ? 'animation-pulse-1s' : ''}
+        >
+          Access
+        </button>
+
       </form>
 
       <Link className="button-link" to="/register">

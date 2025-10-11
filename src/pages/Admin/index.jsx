@@ -21,9 +21,10 @@ export default function Admin() {
     const [taskInput, setTaskInput] = useState("");
     const [user, setUser] = useState({});
     const [edit, setEdit] = useState({});
-
     const [tasks, setTasks] = useState([]);
-
+    const [animatedItemId, setAnimatedItemId] = useState(null);
+    const [isRegisterPulsing, setIsRegisterPulsing] = useState(false);
+    
     useEffect(() => {
         async function loadTasks() {
             const userDetail = localStorage.getItem("@detailUser")
@@ -63,24 +64,42 @@ export default function Admin() {
             return;
         }
 
-        if (edit?.id) {
-            handleUpdateTask();
-            return;
-        }
+        setTimeout(async () => {
+            setIsRegisterPulsing(true); 
 
-        await addDoc(collection(db, "tasks"), {
-            task: taskInput,
-            created: new Date(),
-            userUid: user?.uid
-        })
-        .then(() => {
-            console.log("TASK REGISTERED");
-            setTaskInput("");
-        })
-        .catch((error) => {
-            console.log("ERROR REGISTERING " + error);
-        });
+            if (edit?.id) {
+                const docRef = doc(db, "tasks", edit?.id)
+                await updateDoc(docRef, {
+                    task: taskInput
+                })
+                .then(() => {
+                    setTaskInput("")
+                    setEdit({})
+                })
+                .catch(() => {
+                    setTaskInput("")
+                    setEdit({})
+                });
 
+            } else {
+                await addDoc(collection(db, "tasks"), {
+                    task: taskInput,
+                    created: new Date(),
+                    userUid: user?.uid
+                })
+                .then(() => {
+                    setTaskInput("");
+                })
+                .catch((error) => {
+                    console.log("ERROR REGISTERING " + error);
+                });
+            }
+
+            setTimeout(() => {
+                setIsRegisterPulsing(false);
+            }, 2000); 
+
+        }, 1000); 
     }
 
     async function handleLogout() {
@@ -104,14 +123,40 @@ export default function Admin() {
         })
         .then(() => {
             console.log("TASK UPDATED")
-            setTaskInput('')
+            setTaskInput("")
             setEdit({})
         })
         .catch(() => {
             console.log("ERROR UPDATING")
-            setTaskInput('')
+            setTaskInput("")
             setEdit({})
         });
+    }
+
+    function handleDeleteTaskWithDelay(id) {
+        setAnimatedItemId(id);
+        
+        setTimeout(async () => {
+            const docRef = doc(db, "tasks", id)
+            await deleteDoc(docRef);
+            
+            setTimeout(() => {
+                setAnimatedItemId(null);
+            }, 1000);
+        }, 1000);
+    }
+
+    function handleEditTaskWithDelay(item) {
+        setAnimatedItemId(item.id);
+
+        setTimeout(() => {
+            setTaskInput(item.task)
+            setEdit(item);
+            
+            setTimeout(() => {
+                setAnimatedItemId(null);
+            }, 1000);
+        }, 1000);
     }
 
     return (
@@ -126,19 +171,40 @@ export default function Admin() {
                 />
 
                 {Object.keys(edit).length > 0 ? (
-                    <button className="btn-register" style={{ backgroundColor: "#32CD32" }} type="submit">Update task</button>
+                    <button 
+                        className={`btn-register ${isRegisterPulsing ? "animation-pulse-2s" : ""}`}
+                        style={{ backgroundColor: "#32CD32" }} 
+                        type="submit"
+                    >
+                        Update task
+                    </button>
                 ) : (
-                    <button className="btn-register" type="submit">Register task</button>
+                    <button 
+                        className={`btn-register ${isRegisterPulsing ? "animation-pulse-2s" : ""}`} 
+                        type="submit"
+                    >
+                        Register task
+                    </button>
                 )}
             </form>
 
             {tasks.map((item) => (
-                <article key={item.id} className="list">
+                <article key={item.id} className="list animation-fade-in-downbig-1-5s">
                     <p>{item.task}</p>
 
                     <div>
-                        <button onClick={ () => editTask(item) }>Edit</button> 
-                        <button onClick={() => deleteTask(item.id)} className="btn-delete">Complete</button>
+                        <button
+                            onClick={() => handleEditTaskWithDelay(item)}
+                            className={animatedItemId === item.id ? "animation-pulse-1s" : ""}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            onClick={() => handleDeleteTaskWithDelay(item.id)}
+                            className={`btn-delete ${animatedItemId === item.id ? "animation-pulse-1s" : ""}`}
+                        >
+                            Complete
+                        </button>
                     </div>
                 </article>
             ))}
