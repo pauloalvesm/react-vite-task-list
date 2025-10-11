@@ -12,6 +12,8 @@ import {
     deleteDoc,
     updateDoc
 } from "firebase/firestore";
+import "react-toastify/dist/ReactToastify.css";
+import notificationService from "../../utils/notificationService"; 
 import "./admin.css";
 
 export default function Admin() {
@@ -60,7 +62,7 @@ export default function Admin() {
         e.preventDefault();
 
         if (taskInput === "") {
-            alert("Enter your task...")
+            notificationService.error("Please enter your task.");
             return;
         }
 
@@ -68,7 +70,7 @@ export default function Admin() {
             handleUpdateTask();
             return;
         }
-        
+
         await addDoc(collection(db, "tasks"), {
             task: taskInput,
             created: new Date(),
@@ -76,6 +78,8 @@ export default function Admin() {
         })
         .then(() => {
             console.log("TASK REGISTERED");
+            notificationService.success("Task registered successfully!");
+            
             setTaskInput("");
             setIsRegistering(true);
             setTimeout(() => {
@@ -85,8 +89,8 @@ export default function Admin() {
         })
         .catch((error) => {
             console.log("ERROR REGISTERING " + error);
+            notificationService.error("Error registering task.");
         });
-
     }
 
     async function handleLogout() {
@@ -99,7 +103,15 @@ export default function Admin() {
 
         setTimeout(async () => {
             const docRef = doc(db, "tasks", id)
-            await deleteDoc(docRef);
+            
+            try {
+                await deleteDoc(docRef);
+                notificationService.success("Task completed and deleted!");
+            } catch (error) {
+                console.log("ERROR DELETING " + error);
+                notificationService.error("Error deleting task.");
+            }
+            
             setIsTaskDeleted(null); 
             setIsCompletingTask(null);
         }, 1000);
@@ -125,7 +137,9 @@ export default function Admin() {
             task: taskInput
         })
         .then(() => {
-            console.log("TASK UPDATED")
+            console.log("TASK UPDATED");
+            notificationService.success("Task updated successfully!");
+
             setTaskInput("");
             setTimeout(() => {
                 setEdit({});
@@ -134,7 +148,9 @@ export default function Admin() {
 
         })
         .catch(() => {
-            console.log("ERROR UPDATING")
+            console.log("ERROR UPDATING");
+            notificationService.error("Error updating task.");
+            
             setTaskInput("");
             setEdit({});
             setIsUpdating(false);

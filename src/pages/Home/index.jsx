@@ -1,12 +1,11 @@
 import { useState } from "react";
-import "./home.css";
-
 import { Link } from "react-router-dom";
-
 import { auth } from "../../services/firebaseConnection";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import notificationService from "../../utils/notificationService"; 
+import "./home.css";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -16,33 +15,34 @@ export default function Home() {
   const navigate = useNavigate();
 
   async function handleLogin(e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    setTimeout(async () => {
+        setTimeout(async () => {
 
-      setIsPulsing(true);
+            setIsPulsing(true);
 
-      if (email !== "" && password !== "") {
+            if (email !== "" && password !== "") {
 
-        await signInWithEmailAndPassword(auth, email, password)
-          .then(() => {
-            navigate("/admin", { replace: true })
-          })
-          .catch(() => {
-            console.log("ERROR WHILE LOGGING IN")
-          })
+                await signInWithEmailAndPassword(auth, email, password)
+                    .then(() => {
+                        notificationService.success("Login successful! Welcome.");
+                        navigate("/admin", { replace: true });
+                    })
+                    .catch(() => {
+                        console.log("ERROR WHILE LOGGING IN");
+                        notificationService.error("Login failed. Check your email and password.");
+                    });
 
-      } else {
-        alert("Please fill in all fields!")
-      }
+            } else {
+                notificationService.error("Please fill in all fields!");
+            }
 
-      setTimeout(() => {
-        setIsPulsing(false);
-      }, 1000);
+            setTimeout(() => {
+                setIsPulsing(false);
+            }, 1000);
 
-    }, 1000);
-
-  }
+        }, 1000);
+    }
 
   return (
     <div className="home-container animation-fade-in-downbig-1s">
@@ -67,7 +67,7 @@ export default function Home() {
 
         <button
           type="submit"
-          className={isPulsing ? 'animation-pulse-1s' : ''}
+          className={isPulsing ? "animation-pulse-1s" : ""}
         >
           Access
         </button>
