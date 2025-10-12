@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { auth } from "../../services/firebaseConnection";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-import notificationService from "../../utils/notificationService"; 
+import { FaTasks } from "react-icons/fa";
+import { FiLogIn } from "react-icons/fi";
+import notificationService from "../../utils/notificationService";
+import "react-toastify/dist/ReactToastify.css"; 
 import "./home.css";
 
 export default function Home() {
@@ -46,7 +48,9 @@ export default function Home() {
 
   return (
     <div className="home-container animation-fade-in-downbig-1s">
-      <h1>Task List</h1>
+      <h1 className="title-container">
+        <FaTasks className="icon-title" /> Task List
+      </h1>
       <span>Manage your schedule easily.</span>
 
       <form className="form" onSubmit={handleLogin}>
@@ -69,7 +73,9 @@ export default function Home() {
           type="submit"
           className={isPulsing ? "animation-pulse-1s" : ""}
         >
-          Access
+          <span className="button-content">
+            Access <FiLogIn className="icon-button" />
+          </span>
         </button>
 
       </form>
