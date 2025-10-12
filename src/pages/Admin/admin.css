@@ -23,6 +23,7 @@
   margin-bottom: 12px;
   justify-content: center;
   padding: 14px 8px;
+  border: 1px solid var(--gray-color1); 
 }
 
 .list p{
@@ -30,15 +31,34 @@
 }
 
 .list button{
+  height: 30px;
   margin-right: 8px;
   border:0;
   border-radius: 4px;
   padding: 4px;
 }
 
+.list div {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  color: var(--white-color1);
+  background-color: var(--green-color1);
+  border: 1px solid var(--white-color1); 
+}
+
 .btn-delete{
   color: var(--yellow-color1);
   background-color: transparent;
+  border: 1px solid var(--yellow-color1); 
+}
+
+.list .btn-delete{
+  color: var(--yellow-color1);
+  background-color: transparent;
+  border: 1px solid var(--yellow-color1); 
 }
 
 .btn-logout{

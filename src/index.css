@@ -6,6 +6,7 @@
   --white-color2: #FAFAFA; 
   --gray-color1: #B4B8BB;
   --yellow-color1: #FFCC23;
+  --green-color1: #35B435FF;
   --red-color1: rgba(219, 38, 41, 0.35);   
   --red-color2: rgba(219, 38, 41, 1);   
 }
@@ -23,8 +24,45 @@ body {
   font-family: sans-serif;
 }
 
+h1 {
+  font-size: 48px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center; 
+  color: var(--yellow-color1);
+}
+
+.icon-title {
+  margin-right: 10px;
+  vertical-align: middle; 
+}
+
 button {
   cursor: pointer;
+}
+
+.btn-centered-icon {
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  /* height: 45px; */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.button-content {
+  display: flex;
+  height: 100%;
+  align-items: center; 
+  justify-content: center;
+  width: 100%;
+}
+
+.icon-button {
+  margin-left: 5px;
+  vertical-align: middle;  
 }
 
 .animation-pulse-1s {
