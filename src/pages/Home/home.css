@@ -53,3 +53,9 @@
   margin: 14px 0;
   font-size: 14px;
 }
+
+#clear-button-home {
+  margin-top: 12px !important;
+  background-color: var(--red-color2) !important; 
+  color: var(--white-color1) !important;
+}

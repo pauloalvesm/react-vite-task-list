@@ -4,7 +4,7 @@ import { auth } from "../../services/firebaseConnection";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
-import { FiLogIn } from "react-icons/fi";
+import { FiLogIn, FiTrash2 } from "react-icons/fi";
 import notificationService from "../../utils/notificationService";
 import "react-toastify/dist/ReactToastify.css"; 
 import "./home.css";
@@ -13,8 +13,15 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPulsing, setIsPulsing] = useState(false);
+  const [isClearPulsing, setIsClearPulsing] = useState(false);
 
   const navigate = useNavigate();
+
+  function handleClearInputs() {
+    setIsClearPulsing(true);
+    setEmail("");
+    setPassword("");
+  }
 
   async function handleLogin(e) {
         e.preventDefault();
@@ -75,6 +82,16 @@ export default function Home() {
         >
           <span className="button-content">
             Access <FiLogIn className="icon-button" />
+          </span>
+        </button>
+
+        <button type="button"
+          id="clear-button-home"
+          onClick={handleClearInputs}
+          className={isClearPulsing ? "animation-pulse-1s" : ""}
+        >
+          <span className="button-content">
+            Clear <FiTrash2 className="icon-button" />
           </span>
         </button>
 
