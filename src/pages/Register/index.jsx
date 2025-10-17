@@ -5,13 +5,23 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
+import { FiTrash2 } from "react-icons/fi";
+import notificationService from "../../utils/notificationService";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [isPulsing, setIsPulsing] = useState(false);
+  const [isClearPulsing, setIsClearPulsing] = useState(false);
 
+  function handleClearInputs() {
+    setIsClearPulsing(true);
+    setEmail("");
+    setPassword("");
+  }
+  
   async function handleRegister(e) {
     e.preventDefault();
 
@@ -20,6 +30,7 @@ export default function Register() {
     if (email.trim() !== "" && password.trim() !== "") {
       await createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
+          notificationService.success("Successfully registered user! Welcome.");
           navigate("/admin", { replace: true })
         })
         .catch(() => {
@@ -27,12 +38,12 @@ export default function Register() {
         });
 
     } else {
-      alert("Please fill in all fields!");
+      notificationService.error("Please fill in all fields!");
     }
   }
 
   return (
-    <div className="home-container">
+    <div className="home-container animation-fade-in-downbig-1s">
       <h1 className="title-container">
         <FaUserPlus className="icon-title" /> Register
       </h1>
@@ -59,6 +70,17 @@ export default function Register() {
             Register <FaSave className="icon-button" />
           </span>
         </button>
+
+        <button type="button"
+          id="clear-button-home"
+          onClick={handleClearInputs}
+          className={isClearPulsing ? "animation-pulse-1s" : ""}
+        >
+          <span className="button-content">
+            Clear <FiTrash2 className="icon-button" />
+          </span>
+        </button>
+
       </form>
 
       <Link className="button-link" to="/">
