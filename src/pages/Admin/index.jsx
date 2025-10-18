@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { FaTasks } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa"; 
-import { FiRefreshCw } from "react-icons/fi";
+import { FiRefreshCw, FiTrash2 } from "react-icons/fi";
 import { FaEdit, FaCheck } from "react-icons/fa";  
 import "react-toastify/dist/ReactToastify.css";
 import notificationService from "../../utils/notificationService"; 
@@ -29,7 +29,8 @@ export default function Admin() {
     const [isRegistering, setIsRegistering] = useState(false);
     const [isTaskDeleted, setIsTaskDeleted] = useState(null);
     const [isEditingTask, setIsEditingTask] = useState(null); 
-    const [isCompletingTask, setIsCompletingTask] = useState(null); 
+    const [isCompletingTask, setIsCompletingTask] = useState(null);
+    const [isClearPulsing, setIsClearPulsing] = useState(false); 
 
     useEffect(() => {
         async function loadTasks() {
@@ -61,6 +62,15 @@ export default function Admin() {
 
         loadTasks();
     }, []);
+
+    function handleClearInput() {
+        setIsClearPulsing(true);
+        setTaskInput("");
+        setEdit({});
+        setTimeout(() => {
+            setIsClearPulsing(false);
+        }, 1000);
+    }
 
     async function handleRegister(e) {
         e.preventDefault();
@@ -195,6 +205,16 @@ export default function Admin() {
                             </span>
                     </button>
                 )}
+
+                <button type="button"
+                    id="clear-button-admin"
+                    onClick={handleClearInput}
+                    className={isClearPulsing ? "animation-pulse-1s" : ""}
+                >
+                    <span className="button-content">
+                        Clear <FiTrash2 className="icon-button" />
+                    </span>
+                </button>
             </form>
 
             {tasks.map((item) => (

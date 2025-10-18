@@ -10,7 +10,7 @@
 }
 
 .btn-register{
-  margin-bottom: 28px;
+  margin-bottom: 2px;
 }
 
 .list{
@@ -20,7 +20,8 @@
   flex-direction: column;
   background-color: var(-dark-color2);
   border-radius: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  margin-top: 10px !important;
   justify-content: center;
   padding: 14px 8px;
   border: 1px solid var(--gray-color1); 
@@ -31,7 +32,7 @@
 }
 
 .list button{
-  height: 30px;
+  height: 25px;
   margin-right: 8px;
   border:0;
   border-radius: 4px;
@@ -78,4 +79,10 @@
 .btn-logout:hover{
   background-color: var(--red-color2);
   color: var(--white-color1);
+}
+
+#clear-button-admin {
+  margin-top: 10px !important;
+  background-color: var(--red-color2) !important; 
+  color: var(--white-color1) !important;
 }
