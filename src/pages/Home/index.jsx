@@ -21,37 +21,34 @@ export default function Home() {
     setIsClearPulsing(true);
     setEmail("");
     setPassword("");
+    setTimeout(() => {
+      setIsClearPulsing(false);
+    }, 1000);
   }
 
   async function handleLogin(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        setTimeout(async () => {
+    setIsPulsing(true);
 
-            setIsPulsing(true);
+    if (email !== "" && password !== "") {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          notificationService.success("Login successful! Welcome.");
+          navigate("/admin", { replace: true });
+        })
+        .catch(() => {
+          console.log("ERROR WHILE LOGGING IN");
+          notificationService.error("Login failed. Check your email and password.");
+        });
 
-            if (email !== "" && password !== "") {
-
-                await signInWithEmailAndPassword(auth, email, password)
-                    .then(() => {
-                        notificationService.success("Login successful! Welcome.");
-                        navigate("/admin", { replace: true });
-                    })
-                    .catch(() => {
-                        console.log("ERROR WHILE LOGGING IN");
-                        notificationService.error("Login failed. Check your email and password.");
-                    });
-
-            } else {
-                notificationService.error("Please fill in all fields!");
-            }
-
-            setTimeout(() => {
-                setIsPulsing(false);
-            }, 1000);
-
-        }, 1000);
+    } else {
+      notificationService.error("Please fill in all fields!");
     }
+    setTimeout(() => {
+      setIsPulsing(false);
+    }, 1000);
+  }
 
   return (
     <div className="home-container animation-fade-in-downbig-1s">

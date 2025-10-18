@@ -20,11 +20,14 @@ export default function Register() {
     setIsClearPulsing(true);
     setEmail("");
     setPassword("");
+    setTimeout(() => {
+      setIsClearPulsing(false);
+    }, 1000);
   }
-  
+
   async function handleRegister(e) {
     e.preventDefault();
-
+    
     setIsPulsing(true);
 
     if (email.trim() !== "" && password.trim() !== "") {
@@ -40,6 +43,9 @@ export default function Register() {
     } else {
       notificationService.error("Please fill in all fields!");
     }
+    setTimeout(() => {
+      setIsPulsing(false);
+    }, 1000);
   }
 
   return (
