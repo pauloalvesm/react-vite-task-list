@@ -12,6 +12,10 @@ import {
     deleteDoc,
     updateDoc
 } from "firebase/firestore";
+import { FaTasks } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa"; 
+import { FiRefreshCw, FiTrash2 } from "react-icons/fi";
+import { FaEdit, FaCheck } from "react-icons/fa";  
 import "react-toastify/dist/ReactToastify.css";
 import notificationService from "../../utils/notificationService"; 
 import "./admin.css";
@@ -25,7 +29,8 @@ export default function Admin() {
     const [isRegistering, setIsRegistering] = useState(false);
     const [isTaskDeleted, setIsTaskDeleted] = useState(null);
     const [isEditingTask, setIsEditingTask] = useState(null); 
-    const [isCompletingTask, setIsCompletingTask] = useState(null); 
+    const [isCompletingTask, setIsCompletingTask] = useState(null);
+    const [isClearPulsing, setIsClearPulsing] = useState(false); 
 
     useEffect(() => {
         async function loadTasks() {
@@ -57,6 +62,15 @@ export default function Admin() {
 
         loadTasks();
     }, []);
+
+    function handleClearInput() {
+        setIsClearPulsing(true);
+        setTaskInput("");
+        setEdit({});
+        setTimeout(() => {
+            setIsClearPulsing(false);
+        }, 1000);
+    }
 
     async function handleRegister(e) {
         e.preventDefault();
@@ -158,8 +172,10 @@ export default function Admin() {
     }
 
     return (
-        <div className="admin-container">
-            <h1>My tasks</h1>
+        <div className="admin-container animation-fade-in-downbig-1s">
+            <h1 className="title-container">
+                <FaTasks className="icon-title" /> Task List
+            </h1>
 
             <form className="form" onSubmit={handleRegister}>
                 <textarea
@@ -170,21 +186,35 @@ export default function Admin() {
 
                 {Object.keys(edit).length > 0 || isUpdating ? (
                     <button
-                        className={`btn-register ${isUpdating ? "animation-pulse-1s" : ""}`}
+                        className={`btn-register btn-centered-icon ${isUpdating ? "animation-pulse-1s" : ""}`}
                         style={{ backgroundColor: "#32CD32" }}
                         type="submit"
                         disabled={isUpdating}
                     >
-                        Update task
+                        <span className="button-content">
+                            Update task <FiRefreshCw className="icon-button" />
+                        </span>
                     </button>
                 ) : (
                     <button
-                        className={`btn-register ${isRegistering ? "animation-pulse-1s" : ""}`}
+                        className={`btn-register btn-centered-icon ${isRegistering ? "animation-pulse-1s" : ""}`}
                         type="submit"
                     >
-                        Register task
+                            <span className="button-content">
+                                Register task <FaPlus className="icon-button" />
+                            </span>
                     </button>
                 )}
+
+                <button type="button"
+                    id="clear-button-admin"
+                    onClick={handleClearInput}
+                    className={isClearPulsing ? "animation-pulse-1s" : ""}
+                >
+                    <span className="button-content">
+                        Clear <FiTrash2 className="icon-button" />
+                    </span>
+                </button>
             </form>
 
             {tasks.map((item) => (
@@ -197,15 +227,19 @@ export default function Admin() {
                     <div>
                         <button 
                             onClick={() => editTask(item)}
-                            className={isEditingTask === item.id ? "animation-pulse-1s" : ""}
+                            className={`btn-edit btn-centered-icon ${isEditingTask === item.id ? "animation-pulse-1s" : ""}`}
                         >
-                            Edit
+                            <span className="button-content">
+                                Edit <FaEdit className="icon-button" />
+                            </span>
                         </button> 
                         <button 
                             onClick={() => deleteTask(item.id)} 
-                            className={`btn-delete ${isCompletingTask === item.id ? "animation-pulse-1s" : ""}`} 
+                            className={`btn-delete btn-centered-icon ${isCompletingTask === item.id ? "animation-pulse-1s" : ""}`} 
                         >
-                            Complete
+                            <span className="button-content">
+                                Complete <FaCheck className="icon-button" />
+                            </span>
                         </button>
                     </div>
                 </article>

@@ -3,50 +3,58 @@ import { Link } from "react-router-dom";
 import { auth } from "../../services/firebaseConnection";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-import notificationService from "../../utils/notificationService"; 
+import { FaTasks } from "react-icons/fa";
+import { FiLogIn, FiTrash2 } from "react-icons/fi";
+import notificationService from "../../utils/notificationService";
+import "react-toastify/dist/ReactToastify.css"; 
 import "./home.css";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPulsing, setIsPulsing] = useState(false);
+  const [isClearPulsing, setIsClearPulsing] = useState(false);
 
   const navigate = useNavigate();
 
+  function handleClearInputs() {
+    setIsClearPulsing(true);
+    setEmail("");
+    setPassword("");
+    setTimeout(() => {
+      setIsClearPulsing(false);
+    }, 1000);
+  }
+
   async function handleLogin(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        setTimeout(async () => {
+    setIsPulsing(true);
 
-            setIsPulsing(true);
+    if (email !== "" && password !== "") {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          notificationService.success("Login successful! Welcome.");
+          navigate("/admin", { replace: true });
+        })
+        .catch(() => {
+          console.log("ERROR WHILE LOGGING IN");
+          notificationService.error("Login failed. Check your email and password.");
+        });
 
-            if (email !== "" && password !== "") {
-
-                await signInWithEmailAndPassword(auth, email, password)
-                    .then(() => {
-                        notificationService.success("Login successful! Welcome.");
-                        navigate("/admin", { replace: true });
-                    })
-                    .catch(() => {
-                        console.log("ERROR WHILE LOGGING IN");
-                        notificationService.error("Login failed. Check your email and password.");
-                    });
-
-            } else {
-                notificationService.error("Please fill in all fields!");
-            }
-
-            setTimeout(() => {
-                setIsPulsing(false);
-            }, 1000);
-
-        }, 1000);
+    } else {
+      notificationService.error("Please fill in all fields!");
     }
+    setTimeout(() => {
+      setIsPulsing(false);
+    }, 1000);
+  }
 
   return (
     <div className="home-container animation-fade-in-downbig-1s">
-      <h1>Task List</h1>
+      <h1 className="title-container">
+        <FaTasks className="icon-title" /> Task List
+      </h1>
       <span>Manage your schedule easily.</span>
 
       <form className="form" onSubmit={handleLogin}>
@@ -69,7 +77,19 @@ export default function Home() {
           type="submit"
           className={isPulsing ? "animation-pulse-1s" : ""}
         >
-          Access
+          <span className="button-content">
+            Access <FiLogIn className="icon-button" />
+          </span>
+        </button>
+
+        <button type="button"
+          id="clear-button-home"
+          onClick={handleClearInputs}
+          className={isClearPulsing ? "animation-pulse-1s" : ""}
+        >
+          <span className="button-content">
+            Clear <FiTrash2 className="icon-button" />
+          </span>
         </button>
 
       </form>
