@@ -11,23 +11,52 @@
 
 ## 💻 Project
 
-Web application to simulate a `task list` manager.
+Repository with web application to simulate a `task list` manager. 
 
 ## 🚀 Technologies and Tools
 
 This project was developed using the following technologies:
 
 - **Frontend:**  
-  - `HTML`
+  - `HTML5`
   - `CSS`
   - `JavaScript`
   - `React`
- 
+  - `React Router Dom`
+  - `React Toastify`
+  - `React Icons`
+  - `Firebase`
+  - `Animate CSS`
+  - `Vite`
+    
+## 📌 Technical Decisions
+
+I decided to implement a better visual and interactive experience for the user.
+
+To do this, I integrated libraries such as `Animate.css` for fluid CSS animations and `React-Toastify` for intuitive notifications.
+
+
   ## 💾 Clone the repository
 
 ```bash
+# Clone the repository
 git clone https://github.com/pauloalvesm/react-vite-task-list.git
+
+# Navigate to the project folder
+cd react-vite-task-list
+
+# Restore dependencies
+npm install
+
+# Run the project
+npm run dev
 ```
+
+## 📷 Screenshots
+
+<p align="center"> <img src="https://github.com/pauloalvesm/react-vite-task-list/blob/master/src/assets/images/screenshot1.png?raw=true" /></p>
+<p align="center"> <img src="https://github.com/pauloalvesm/react-vite-task-list/blob/master/src/assets/images/screenshot2.png?raw=true" /></p>
+<p align="center"> <img src="https://github.com/pauloalvesm/react-vite-task-list/blob/master/src/assets/images/screenshot3.png?raw=true" /></p>
 
 ## 👤 Author
 
